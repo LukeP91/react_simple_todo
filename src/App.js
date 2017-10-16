@@ -1,28 +1,39 @@
 import React, { Component } from 'react'
 
+import {actionCreators} from './todoListRedux'
 import List from './List'
 import Input from './Input'
 import Title from './Title'
 
 export default class App extends Component {
-  state = {
-    tasks: ["Take out trash", "Pay for internet", "Change phone provider"]
-  }
+  state = {}
 
-  onAddTask = (task) => {
-    const {tasks} = this.state;
+  componentWillMount() {
+    const {store} = this.props
 
-    this.setState({
-      tasks: [...tasks, task]
+    const {tasks} = store.getState();
+    this.setState({tasks});
+
+    this.unsubscribe = store.subscribe(() => {
+      const {tasks} = store.getState();
+      this.setState({tasks});
     });
   };
 
-  removeTask = index => {
-    const {tasks} = this.state;
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
-    this.setState({
-      tasks: tasks.filter((tasks, i) => i != index),
-    });
+  onAddTask = (task) => {
+    const {store} = this.props;
+
+    store.dispatch(actionCreators.add(task));
+  };
+
+  removeTask = index => {
+    const {store} = this.props;
+
+    store.dispatch(actionCreators.remove(index));
   };
 
   render() {

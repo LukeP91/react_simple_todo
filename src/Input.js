@@ -10,7 +10,7 @@ export default class Input extends Component {
   };
 
   handleKeyPress = e => {
-    if (e.key != 'Enter') return;
+    if (e.key !== 'Enter') return;
 
     const { onSubmitEditing } = this.props;
     const { value } = this.state;
